@@ -13,18 +13,6 @@ public:
                 result[npos] = nums[i];
                 npos+=2;
             }
-            /*
-            if (i%2) // odd location, -ve
-            {
-                while (nums[++last_neg]>0) ;
-                result[i] = nums[last_neg];
-            }
-            else    // even location, +ve
-            {
-                while (nums[++last_pos]<0) ;
-                result[i] = nums[last_pos];                
-            }
-            */
         }
         return result;
     }
