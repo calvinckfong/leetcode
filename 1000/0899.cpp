@@ -12,7 +12,8 @@ public:
             string result = s;
             for (int i=0; i<s.size()-1; i++)
             {
-                s = s.substr(1) + s[0];
+                s.push_back(s[0]);
+                s.erase(0, 1);
                 if (s<result) result = s;
             }
             return result;
