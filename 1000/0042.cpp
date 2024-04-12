@@ -3,30 +3,35 @@ class Solution {
 public:
     int trap(vector<int>& height) {
         int l,r,h,n=height.size();
-        int result = 0;
+        int sum, result = 0;
+
         // left to right
-        l=0, r=0;
+        l=0, r=0, h=height[l], sum=0;
         while (r<n) {
-            if (height[r]>=height[l] && r>l) {
-                h = height[l++];
-                while (l<r) {
-                    result += h-height[l++];
-                }
+            if (h<=height[r] && r>l) {
+                result += sum;
+                sum = 0;
+                h = height[r];
+                l=r;
+            } else {
+                sum += h-height[r];
             }
             r++;
         }
 
         // right to left
-        l=n-1, r=n-1;
+        l=n-1, r=n-1, h=height[l], sum=0;
         while (l>=0) {
-            if (height[l]>height[r]) {
-                h = height[r--];
-                while (r>l) {
-                    result += h-height[r--];
-                }
+            if (h<height[l]) {
+                result += sum;
+                sum = 0;
+                h = height[l];
+            } else {
+                sum += h-height[l];
             }
             l--;
         }
+
         return result;
     }
 };
