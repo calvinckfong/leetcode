@@ -4,11 +4,11 @@ public:
     int minStep;
     
     // record the indices of ring for each characters
-    unordered_map<char, vector<int>> mp;
+    vector<int> mp[26];
     void buildMap(string& ring) {
         int n=ring.size();
         for (int i=0; i<n; i++) {
-            mp[ring[i]].push_back(i);
+            mp[ring[i]-'a'].push_back(i);
         }
     }
 
@@ -26,15 +26,16 @@ public:
         char k = key[kIdx];
 
         // loop through all indices of the same character
-        for (int i=0; i<mp[k].size(); i++) {
-            int next_pos = mp[k][i];
+        for (char next_pos: mp[k-'a']) {
             // next char in key
             int step = rotateStep(key, next_pos, kIdx+1, n, dp);
+            if (step>result) continue;
 
-            // find the best move from both fw and bw
+            // find the best move between clockwise and anti-clockwise
             int mv_step = min(abs(next_pos-pos), n-abs(next_pos-pos));
             result = min(result, mv_step+step);
         }
+
         dp[kIdx][pos] = result;
         return result;
     }
