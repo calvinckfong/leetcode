@@ -10,8 +10,7 @@ public:
         // collect the gold
         for (int i=0; i<m; i++) {
             for (int j=0; j<n; j++) {
-                vector<vector<int>> tmpGrid = grid;
-                int amount = getGold(tmpGrid, i, j, 0);
+                int amount = getGold(grid, i, j, 0);
                 result = max(result, amount);
             }
         }
