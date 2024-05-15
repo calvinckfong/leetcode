@@ -10,12 +10,6 @@ public:
         vector<vector<char>> visited(n, vector<char>(n, 0));
         buildSafeness(grid, safeness, n);
 
-        int result=MAX_DIST;
-        auto cmp = [](const array<int,3>& a, const array<int,3>& b) { 
-            return a[0]>b[0]; 
-        };
-
-        //priority_queue<array<int, 3>, vector<array<int, 3>>, decltype(cmp)> q;
         priority_queue<array<int, 3>> q;
         q.push({safeness[0][0], 0, 0});
         while (!q.empty()) {
