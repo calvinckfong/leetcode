@@ -4,19 +4,15 @@ public:
     int countTriplets(vector<int>& arr) {
         int n=arr.size(), result=0;
 
+        // Using the property that 
+        // if a[i] ^ a[i+1] ^ ... ^ a[k] = 0,
+        // there are k-i combinations that 
+        // a[i] ^ ... ^ a[j-1] = a[j] ^ ... ^ a[k]
         for (int i=0; i<n-1; i++) {
-            for (int j=i+1; j<n; j++) {
-                int a=arr[i];
-                for (int u=i+1; u<j; u++)
-                    a = a ^ arr[u];
-                
-                for (int k=j; k<n; k++) {
-                    int b=arr[j];
-                    for (int u=j+1; u<=k; u++)
-                        b = b ^ arr[u];
-                    
-                    result += (a==b); 
-                }
+            int a = 0;
+            for (int k=i; k<n; k++) {
+                a^=arr[k];
+                if (a == 0) result += (k-i); 
             }
         }
 
