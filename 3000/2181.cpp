@@ -17,14 +17,14 @@ public:
         int sum = 0;
         head = head->next;
         while (head) {
-            if (head->val == 0) {
-                dummy->next = new ListNode(sum);
-                dummy = dummy->next;
-                sum = 0;
-            } else {
+            while (head->val != 0) {
                 sum += head->val;
+                head = head->next;
             }
+            dummy->next = new ListNode(sum);
+            dummy = dummy->next;            
             head = head->next;
+            sum = 0;
         }
 
         return result->next;
