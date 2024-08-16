@@ -3,12 +3,14 @@ class Solution {
 public:
     int maxDistance(vector<vector<int>>& arrays) {
         int m = arrays.size();
-        int minVal = *min_element(arrays[0].begin(), arrays[0].end());
-        int maxVal = *max_element(arrays[0].begin(), arrays[0].end());
+        int n = arrays[0].size();
+        int minVal = arrays[0][0];
+        int maxVal = arrays[0][n-1];
         int minV, maxV, result = 0;
         for (int i=1; i<m; i++) {
-            minV = *min_element(arrays[i].begin(), arrays[i].end());
-            maxV = *max_element(arrays[i].begin(), arrays[i].end());
+            n = arrays[i].size();
+            minV = arrays[i][0];
+            maxV = arrays[i][n-1];
             result = max(result, maxVal-minV);
             result = max(result, maxV-minVal);
             maxVal = max(maxVal, maxV);
