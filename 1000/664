@@ -1,0 +1,29 @@
+// 664. Strange Printer
+class Solution {
+public:
+    int strangePrinter(string s) {
+        int n = s.size();
+
+        vector<vector<int>> dp(n, vector<int>(n, -1));
+
+        return solve(0, n-1, s, dp);
+    }
+
+private:
+    int solve(int start, int end, string& s, vector<vector<int>>& dp) {
+        if (start > end) return 0;
+        if (dp[start][end]!=-1) return dp[start][end]; 
+
+        int minVal = 1 + solve(start+1, end, s, dp);
+
+        char c = s[start];
+        for (int i=start+1; i<=end; i++) {
+            if (s[i]==c) {
+                int breakdown = solve(start, i-1, s, dp) +
+                    solve(i+1, end, s, dp);
+                minVal = min(minVal, breakdown);
+            }
+        }
+        return dp[start][end] = minVal;
+    }
+};
