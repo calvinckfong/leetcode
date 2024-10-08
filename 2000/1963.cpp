@@ -2,15 +2,11 @@
 class Solution {
 public:
     int minSwaps(string s) {
-        int closeCnt=0, maxCloseCnt=0;
-        for (int i=0; i<s.size(); i++)
-        {
-            if (s[i]==']') {
-                closeCnt++;
-                if (closeCnt>maxCloseCnt) maxCloseCnt = closeCnt;
-            }
-            else closeCnt--;
+        int ss = 0;
+        for (char c: s) {
+            if (c == '[') ss++;
+            else if (ss>0) ss--;
         }
-        return (maxCloseCnt+closeCnt+1)/2;
+        return (ss+1)/2;
     }
 };
