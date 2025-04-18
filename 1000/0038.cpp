@@ -4,27 +4,19 @@ public:
     string countAndSay(int n) {
         if (n==1) return "1";
 
-        return RLE(countAndSay(n-1));
-    }
-
-    string RLE(string s) {
-        auto c = s.rbegin();
-        char last = *c; c++;
+        string str = countAndSay(n-1), result="";
+        int len = str.size();
+        char last = str[len-1];
         int cnt = 1;
-        string result="";
-        
-        for (; c!=s.rend(); ++c) {
-            if (*c != last) {
-                result = to_string(cnt) + last + result;
-                last = *c;
-                cnt = 1;
-            } else {
+        for (int i=len-2; i>=0; i--) {
+            if (str[i] == last) {
                 cnt++;
+            } else {
+                result = to_string(cnt) + last + result;
+                last = str[i];
+                cnt = 1;
             }
         }
-        if (cnt) {
-            result = to_string(cnt) + last + result;
-        }
-        return result;
+        return to_string(cnt) + last + result;
     }
 };
