@@ -2,39 +2,43 @@
 class Solution {
 public:
     int mostBooked(int n, vector<vector<int>>& meetings) {
-        int i, j, room;
-        int start, end;
-        bool booked;
-        vector<long>::iterator rec;
+
         sort(meetings.begin(), meetings.end());
         vector<long> endTime(n, 0);
         vector<int> cnt(n, 0);
+        priority_queue<int, vector<int>, greater<>> aval;
+        for (int i=0; i<n; i++)
+            aval.push(i);
 
-        for (i=0; i<meetings.size(); i++)
-        {
-            start = meetings[i][0];
-            end = meetings[i][1];
-            booked=false;
-            for (j=0; j<n; j++)
-            {
-                if (endTime[j]<=start)
-                {
-                    // book room j
-                    endTime[j] = end;
-                    booked = true;
-                    cnt[j]++;
-                    break;
-                }
+        priority_queue<pair<long, int>, vector<pair<long, int>>, greater<>> busy;
+
+        for (vector<int>& m: meetings) {
+            long start = m[0], end = m[1];
+
+            while (!busy.empty() && busy.top().first<=start) {
+                aval.push(busy.top().second);
+                busy.pop();
             }
-            if (!booked) // reschedule meeting
-            {
-                rec = min_element(endTime.begin(), endTime.end());
-                room = rec - endTime.begin();
-                *rec += end-start;
-                cnt[room]++;
+
+            if (!aval.empty()) {
+                int rm = aval.top();
+                aval.pop();
+                endTime[rm] = end;
+                cnt[rm]++;
+                busy.push({end, rm});
+            } else {
+                auto [et, rm] = busy.top();
+                busy.pop();
+                endTime[rm] = et + (end-start);
+                cnt[rm]++;
+                busy.push({endTime[rm], rm});
             }
         }
 
-        return max_element(cnt.begin(), cnt.end()) - cnt.begin();
+        int res = 0;
+        for (int i=1; i<n; i++) {
+            if (cnt[i]>cnt[res]) res = i;
+        }
+        return res;
     }
 };
