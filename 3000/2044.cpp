@@ -2,27 +2,25 @@
 class Solution {
 public:
     int countMaxOrSubsets(vector<int>& nums) {
-        int n=nums.size(), k=0;
-        if (n==1) return 1;
-
-        int maxOrSum = 0;
-        for (int i=0; i<n; i++)
-            maxOrSum |= nums[i];
-        while (maxOrSum) {
-            maxOrSum>>=1;
-            k++;
+        maxOR = 0;
+        n = nums.size();
+        for (int& num: nums) {
+            maxOR |= num;
         }
+        return backtrack(nums, 0, 0);
+    }
 
-        vector<int> dp(1<<k, 0);
-        dp[0] = 1;
-        
-        maxOrSum = 0;
-        for (int i=0; i<n; i++) {
-            for (int j=maxOrSum; j>=0; j--) {
-                dp[j|nums[i]] += dp[j];
-            }
-            maxOrSum |= nums[i];
+private:
+    int maxOR;
+    int n;
+
+    int backtrack(vector<int>& nums, int idx, int currOR) {
+        if (idx == n) return (currOR==maxOR);
+        if (currOR==maxOR) {
+            return 1<<(n-idx);
         }
-        return dp[maxOrSum];
+        int res = backtrack(nums, idx+1, currOR|nums[idx]);
+        res += backtrack(nums, idx+1, currOR);
+        return res;
     }
 };
