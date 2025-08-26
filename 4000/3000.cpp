@@ -2,23 +2,22 @@
 class Solution {
 public:
     int areaOfMaxDiagonal(vector<vector<int>>& dimensions) {
-        int max_diag = 0, diag, area;
-        int w, h;
-        for (auto it:dimensions)
+        int max_diag = 0, res;
+        for (auto& it:dimensions)
         {
-            w = it[0]; h= it[1];
-            diag = w*w + h*h;
+            int w = it[0], h= it[1];
+            int diag = w*w + h*h;
             if (diag > max_diag)
             {
                 max_diag = diag;
-                area = w*h;
+                res = w*h;
             }
             else if (diag == max_diag)
             {
-                area = max(area, w*h);
+                res = max(res, w*h);
             }
         }
 
-        return area;
+        return res;
     }
 };
