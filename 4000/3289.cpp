@@ -2,16 +2,14 @@
 class Solution {
 public:
     vector<int> getSneakyNumbers(vector<int>& nums) {
-        map<int, int> freq;
+        int freq[100] = {0};
         for (int n: nums) {
             freq[n]++;
         }
 
         vector<int> res;
-        for (auto& p: freq) {
-            if (p.second == 2) {
-                res.push_back(p.first);
-            }
+        for (int i=0; i<100; i++) {
+            if (freq[i] == 2) res.push_back(i);
         }
         return res;
     }
