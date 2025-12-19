@@ -2,69 +2,41 @@
 class Solution {
 public:
     vector<int> findAllPeople(int n, vector<vector<int>>& meetings, int firstPerson) {
-        // sort meetings according to time
-        sort(meetings.begin(), meetings.end(), [](vector<int>a, vector<int>b){
-            //return a[2]<b[2];
-            if (a[2]<b[2]) return true;
-            else if (a[2]>b[2]) return false;
-            else return ( min(a[0], a[1])<min(b[0], b[1]) );
+        sort(meetings.begin(), meetings.end(), [](auto& a, auto& b){
+            return a[2] < b[2];
         });
-
-        // Initialize with person 0 and first person
-        vector<unordered_set<int>> sessions = {{}};
-        unordered_set<int> result = {0, firstPerson};
         
-        int currTime = 0;
-        for (auto m: meetings)
-        {
-            if (m[2]>currTime) // new meeting
-            {
-                for (auto s: sessions)
-                {
-                    for (auto p: s)
-                    {
-                        // check if any one in current meeting has the secret
-                        // if true, add all persons in this session to result
-                        if (result.find(p) != result.end())
-                        {
-                            result.insert(s.begin(), s.end());
-                            break;
-                        }
-                    }
-                }
-                sessions.clear();
-                sessions = {{}};
-                currTime = m[2];
-            }
-
-            bool hasSecret = false;
-            for (auto &s: sessions)
-            {
-                if ( s.find(m[0])!=s.end()  || s.find(m[1])!=s.end() )
-                {
-                    s.insert(m[0]);
-                    s.insert(m[1]);
-                    hasSecret = true;
-                    break;
-                }
-            }
-            if (!hasSecret) // new session
-                sessions.push_back({m[0], m[1]});
+        unordered_map<int, vector<pair<int, int>>> graph;
+        for (auto& m: meetings) {
+            int x = m[0], y = m[1], t = m[2];
+            graph[x].emplace_back(t, y);
+            graph[y].emplace_back(t, x);
         }
-        // finalize last meeting
-        for (auto s: sessions)
-        {
-            for (auto p: s)
-            {
-                // check if any one in current meeting has the secret
-                if (result.find(p) != result.end())
-                {
-                    result.insert(s.begin(), s.end());
-                    break;
+
+        vector<int> earliest(n, INT_MAX);
+        earliest[0] = 0;
+        earliest[firstPerson] = 0;
+
+        queue<pair<int, int>> q;
+        q.emplace(0, 0);
+        q.emplace(firstPerson, 0);
+        while (!q.empty()) {
+            auto [curr, time] = q.front();
+            q.pop();
+            for (auto [t, next]: graph[curr]) {
+                if (t>=time && earliest[next]>t) {
+                    earliest[next] = t;
+                    q.emplace(next, t);
                 }
             }
         }
 
-        return vector<int>(result.begin(), result.end());
+        vector<int> res;
+        for (int i=0; i<n; i++) {
+            if (earliest[i] != INT_MAX) {
+                res.push_back(i);
+            }
+        }
+        return res;
     }
 };
