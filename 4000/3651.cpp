@@ -21,11 +21,11 @@ public:
             for (int i=0, j=0; i<ps; i++) {
                 int x = points[i].first;
                 int y = points[i].second;
-                int nx = points[i+1].first;
-                int ny = points[i+1].second;
                 minCost = min(minCost, costs[x][y]);
-                if (i+1<ps && grid[x][y]==grid[nx][ny]) {
-                    continue;
+                if (i+1<ps) {
+                    int nx = points[i+1].first;
+                    int ny = points[i+1].second;
+                    if (grid[x][y]==grid[nx][ny]) continue;
                 }
                 for (int r=j; r<=i; r++) {
                     costs[points[r].first][points[r].second] = minCost;
