@@ -2,31 +2,40 @@
 class Solution {
 public:
     long long minimumCost(string source, string target, vector<char>& original, vector<char>& changed, vector<int>& cost) {
-        const int MAX_COST = 2000000;
-        vector<vector<int>> graph(26, vector<int>(26, MAX_COST));
-        for (int i=0; i<26; i++)
-            graph[i][i] = 0;
-        
-        // Build graph
-        for (int i=0; i<original.size(); i++) {
-            int c1 = original[i]-'a';
-            int c2 = changed[i]-'a'; 
-            graph[c1][c2] = min(graph[c1][c2], cost[i]);
+        int m = cost.size();
+        int n = source.size();
+        vector<vector<int>> graph(26, vector<int>(26, INT_MAX));
+        for (int i=0; i<26; i++) graph[i][i] = 0;
+
+        long long res = 0;
+        for (int i=0; i<m; i++) {
+            int src = original[i]-'a';
+            int dst = changed[i]-'a';
+            graph[src][dst] = min(graph[src][dst], cost[i]);
         }
 
-        // Find min-distance
-        for (int k=0; k<26; k++)
-            for (int i=0; i<26; i++)
-                for (int j=0; j<26; j++)
-                    graph[i][j] = min(graph[i][j], graph[i][k] + graph[k][j]);
-
-        // compute total cost
-        long long result = 0;
-        for (int i=0; i<source.size(); i++) {
-            int c = graph[source[i]-'a'][target[i]-'a'];
-            if (c == MAX_COST) return -1;
-            else result += c;
+        for (int i=0; i<26; i++) {
+            for (int j=0; j<26; j++) {
+                if (graph[j][i] != INT_MAX) {
+                    for (int k=0; k<26; k++) {
+                        if (graph[i][k] != INT_MAX) {
+                            graph[j][k] = min(graph[j][k], graph[j][i]+graph[i][k]);
+                        }
+                    }
+                }
+            }
         }
-        return result;
+
+        for (int i=0; i<n; i++) {
+            if (source[i]==target[i]) continue;
+            else {
+                int src = source[i]-'a';
+                int dst = target[i]-'a';
+                if (graph[src][dst]==INT_MAX) return -1;
+                res += graph[src][dst];
+            }
+        }
+
+        return res;
     }
 };
