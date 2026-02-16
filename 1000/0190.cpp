@@ -1,13 +1,15 @@
 // 190. Reverse Bits
 class Solution {
 public:
-    uint32_t reverseBits(uint32_t n) {
-        uint32_t result;
-        for (int i=0; i<32; i++)
+    int reverseBits(int n) {
+        if (!n) return n;
+        int result=0, i=31;
+        for (; i>=0 && n>0; i--)
         {
-            result = (result<<1) + (n&1);
+            result <<= 1;
+            result |= (n&1);
             n>>=1;
         }
-        return result;
+        return result<<(i+1);
     }
 };
