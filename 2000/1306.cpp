@@ -11,14 +11,15 @@ public:
             int pos = q.front();
             q.pop();
 
-            if (pos<0 || pos>=n || visit[pos]) continue;
-
             if (arr[pos] == 0) return true;
 
             visit[pos] = true;
 
-            q.push(pos + arr[pos]);
-            q.push(pos - arr[pos]);
+            int next;
+            next = pos + arr[pos];
+            if (next<n && !visit[next]) q.push(next);
+            next = pos - arr[pos];
+            if (next>=0 && !visit[next]) q.push(next);
         }
 
         return false;
