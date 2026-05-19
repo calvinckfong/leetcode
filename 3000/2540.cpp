@@ -2,13 +2,18 @@
 class Solution {
 public:
     int getCommon(vector<int>& nums1, vector<int>& nums2) {
-        int p1=0, p2=0;
-        while (p1<nums1.size() && p2<nums2.size())
-        {
-            if (nums1[p1] == nums2[p2]) return nums1[p1];
-            else if (nums1[p1] > nums2[p2]) p2++;
-            else p1++;
+        int i1=0, i2=0;
+        int res = 1e9;
+
+        while (i1<nums1.size() && i2<nums2.size()) {
+            int x1 = nums1[i1];
+            int x2 = nums2[i2];
+            
+            if (x1 == x2) return x1;
+            else if (x1 > x2) i2++;
+            else i1++;
         }
+
         return -1;
     }
 };
