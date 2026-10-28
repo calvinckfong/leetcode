@@ -1,0 +1,33 @@
+// 3882. Minimum XOR Path in a Grid
+class Solution {
+public:
+    int minCost(vector<vector<int>>& grid) {
+        int m = grid.size(), n = grid[0].size();
+
+        vector<array<bool, 1024>> dp(n);
+        array<bool, 1024> next;
+
+        dp[0][grid[0][0]] = true;
+
+        for (int i=0; i<m; i++) {
+            for (int j=0; j<n; j++) {
+                if (i==0 && j==0) continue;
+
+                int x = grid[i][j];
+                next.fill(false);
+
+                for (int k=0; k<1024; k++) {
+                    if (dp[j][k] || (j>0 && dp[j-1][k])) {
+                        next[k^x] = true;
+                    }
+                }
+                dp[j] = next;
+            }
+        }
+
+        for (int k=0; k<1024; k++) {
+            if (dp[n-1][k]) return k;
+        }
+        return -1;
+    }
+};
