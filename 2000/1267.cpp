@@ -5,35 +5,27 @@ public:
         const int maxN = 250;
         int m = grid.size(), n = grid[0].size();
 
-        struct pair_hash {
-            inline std::size_t operator()(const std::pair<int,int> & v) const {
-                return v.first*maxN+v.second;
-            }
-        };
-        unordered_set<pair<int, int>, pair_hash> result;
+        vector<int> rowCnt(m, 0);
+        vector<int> colCnt(n, 0);
 
         for (int i=0; i<m; i++) {
-            vector<int> onGrid;
             for (int j=0; j<n; j++) {
-                if (grid[i][j]) onGrid.push_back(j);
-            }
-            if (onGrid.size()>1) {
-                for (int j: onGrid)
-                    result.insert({i,j});
-            }
-        }
-
-        for (int i=0; i<n; i++) {
-            vector<int> onGrid;
-            for (int j=0; j<m; j++) {
-                if (grid[j][i]) onGrid.push_back(j);
-            }
-            if (onGrid.size()>1) {
-                for (int j: onGrid)
-                    result.insert({j,i});
+                if (grid[i][j]) {
+                    rowCnt[i]++;
+                    colCnt[j]++;
+                }
             }
         }
 
-        return result.size();
+        int res = 0;
+        for (int i=0; i<m; i++) {
+            for (int j=0; j<n; j++) {
+                if (grid[i][j]==1) {
+                    res += (rowCnt[i]>1 || colCnt[j]>1);
+                }   
+            }
+        }
+
+        return res;
     }
 };
